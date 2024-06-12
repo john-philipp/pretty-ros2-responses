@@ -47,4 +47,40 @@ Yielding formatted response:
 }
 ```
 
-Is there another way to achieve this. Probably. I personally feel JSON should be default.
+The types can be added using `-i` on the command line or using env variable `PR_I=True|False`. If the value can't be evaluated by `ast.literal_eval()` it's silently ignored. That is, `PR_I=true|false` will be ignored.
+
+Either of
+```
+ros2 service call /service/list msgs/srv/ServiceList '{}' | pr -i
+ros2 service call /service/list msgs/srv/ServiceList '{}' | PR_I=True pr
+```
+evaluates to:
+```
+{
+  "_type": "msgs.srv.Srv_Response",
+  "loaded": [],
+  "backups": [
+    {
+      "_type": "msgs.msg.Msg",
+      "id": "171",
+      "updated_at": "2024-05-31 17:14:45",
+      "path": "/backup/path/1.db3"
+    },
+    {
+      "_type": "msgs.msg.Msg",
+      "id": "171",
+      "updated_at": "2024-06-03 11:00:38",
+      "path": "/backup/path/2.db3"
+    }
+  ],
+  "error": {
+    "_type": "msgs.msg.ErrorMsg",
+    "error_code": 0,
+    "error_msg": ""
+  }
+}
+```
+
+Types are included at the top-level to avoid further nesting of the data, as well as  looking for matching braces in possibly nested JSON.
+
+Is there another way to pretty ROS2 messages. Probably. I personally feel JSON should be default.

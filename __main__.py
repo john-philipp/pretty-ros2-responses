@@ -3,9 +3,11 @@ import sys
 from rich.console import Console
 from rich.json import JSON
 
-from src.methods import convert_ros2_response_to_json_s, format_json
+from src.methods import convert_ros2_response_to_json_s, format_json, handle_input_args
 
 if __name__ == "__main__":
+
+    args = handle_input_args(*sys.argv[1:])
 
     console = Console()
     format_remainder = False
@@ -20,7 +22,7 @@ if __name__ == "__main__":
             continue
 
         if format_remainder:
-            json_s = convert_ros2_response_to_json_s(line)
+            json_s = convert_ros2_response_to_json_s(line, args.include_types)
             console.print(JSON(format_json(json_s)))
             break
 
