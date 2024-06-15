@@ -1,5 +1,6 @@
 import pytest
 
+from src.env import ENV
 from src.methods import convert_ros2_response_to_json_s as to_json_s
 from src.methods import format_json
 
@@ -98,8 +99,8 @@ class TestConversionAndFormat:
             for string in strings:
                 format_json(string)
 
-    def check(self, input_s, expected_output_s, include_types):
-        json_s = to_json_s(input_s, include_types)
+    def check(self, input_s, expected_output_s, env):
+        json_s = to_json_s(input_s, env)
         if json_s != expected_output_s:
             self.print_context(json_s, expected_output_s, n=len(json_s))
             raise AssertionError(json_s, expected_output_s)
@@ -107,6 +108,10 @@ class TestConversionAndFormat:
     def test_conversion_and_format(self, input_s, output_s_no_types, output_s_including_types):
         # Notably, this doesn't check the outer argparse handling.
         # We're sort of assuming that to work. :)
-        self.check(input_s, output_s_including_types, True)
-        self.check(input_s, output_s_no_types, False)
+        env = ENV
+        env.include_types.value = True
+        self.check(input_s, output_s_including_types, env)
+
+        env.include_types.value = False
+        self.check(input_s, output_s_no_types, env)
 

@@ -83,4 +83,6 @@ evaluates to:
 
 Types are included at the top-level to avoid further nesting of the data, as well as  looking for matching braces in possibly nested JSON.
 
+In case the data already includes key `_type` and the `-i` option is passed, we'll run into a repeated key error. If you want to keep the type prefix, you can rename the type key via env variable `PR_T` and/or option `-t`.
+
 Is there another way to pretty ROS2 messages. Probably. I personally feel JSON should be default.

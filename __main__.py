@@ -7,7 +7,7 @@ from src.methods import convert_ros2_response_to_json_s, format_json, handle_inp
 
 if __name__ == "__main__":
 
-    args = handle_input_args(*sys.argv[1:])
+    args, env = handle_input_args(*sys.argv[1:])
 
     console = Console()
     format_remainder = False
@@ -22,7 +22,7 @@ if __name__ == "__main__":
             continue
 
         if format_remainder:
-            json_s = convert_ros2_response_to_json_s(line, args.include_types)
+            json_s = convert_ros2_response_to_json_s(line, env)
             console.print(JSON(format_json(json_s)))
             break
 
